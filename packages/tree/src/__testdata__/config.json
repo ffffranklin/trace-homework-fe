@@ -1,0 +1,270 @@
+{
+  "options": {
+    "type": "directed",
+    "multi": true,
+    "allowSelfLoops": false
+  },
+  "attributes": {
+    "name": "total_orders_calc",
+    "label": "Total Orders",
+    "timegrain": "calendar-week",
+    "type": "expression"
+  },
+  "nodes": [
+    {
+      "key": "total_carts",
+      "attributes": {
+        "type": "metric",
+        "format": "integer",
+        "label": "Total Carts",
+        "shortLabel": "Carts",
+        "segment": []
+      }
+    },
+    {
+      "key": "cart_conversion",
+      "attributes": {
+        "type": "metric",
+        "format": "percent",
+        "label": "Cart Conversion",
+        "segment": []
+      }
+    },
+    {
+      "key": "total_orders_calc",
+      "attributes": {
+        "type": "operator",
+        "operator": "*",
+        "format": "integer",
+        "label": "Total Orders",
+        "shortLabel": "Orders",
+        "segment": []
+      }
+    },
+    {
+      "key": "total_orders_calc__first_order_market__eq__New_York",
+      "attributes": {
+        "type": "operator",
+        "operator": "*",
+        "format": "integer",
+        "label": "Total Orders",
+        "shortLabel": "Orders",
+        "segment": [
+          {
+            "name": "city",
+            "value": "New York"
+          }
+        ]
+      }
+    },
+    {
+      "key": "total_carts__first_order_market__eq__New_York",
+      "attributes": {
+        "type": "metric",
+        "format": "integer",
+        "label": "Total Carts",
+        "shortLabel": "Carts",
+        "segment": [
+          {
+            "name": "city",
+            "value": "New York"
+          }
+        ]
+      }
+    },
+    {
+      "key": "cart_conversion__first_order_market__eq__New_York",
+      "attributes": {
+        "type": "metric",
+        "format": "percent",
+        "label": "Cart Conversion",
+        "segment": [
+          {
+            "name": "city",
+            "value": "New York"
+          }
+        ]
+      }
+    },
+    {
+      "key": "total_orders_calc__first_order_market__eq__Boston",
+      "attributes": {
+        "type": "operator",
+        "operator": "*",
+        "format": "integer",
+        "label": "Total Orders",
+        "shortLabel": "Orders",
+        "segment": [
+          {
+            "name": "city",
+            "value": "Boston"
+          }
+        ]
+      }
+    },
+    {
+      "key": "total_carts__first_order_market__eq__Boston",
+      "attributes": {
+        "type": "metric",
+        "format": "integer",
+        "label": "Total Carts",
+        "shortLabel": "Carts",
+        "segment": [
+          {
+            "name": "city",
+            "value": "Boston"
+          }
+        ]
+      }
+    },
+    {
+      "key": "cart_conversion__first_order_market__eq__Boston",
+      "attributes": {
+        "type": "metric",
+        "format": "percent",
+        "label": "Cart Conversion",
+        "segment": [
+          {
+            "name": "city",
+            "value": "Boston"
+          }
+        ]
+      }
+    },
+    {
+      "key": "total_orders_calc__first_order_market__eq__Chicago",
+      "attributes": {
+        "type": "operator",
+        "operator": "*",
+        "format": "integer",
+        "label": "Total Orders",
+        "shortLabel": "Orders",
+        "segment": [
+          {
+            "name": "city",
+            "value": "Chicago"
+          }
+        ]
+      }
+    },
+    {
+      "key": "total_carts__first_order_market__eq__Chicago",
+      "attributes": {
+        "type": "metric",
+        "format": "integer",
+        "label": "Total Carts",
+        "shortLabel": "Carts",
+        "segment": [
+          {
+            "name": "city",
+            "value": "Chicago"
+          }
+        ]
+      }
+    },
+    {
+      "key": "cart_conversion__first_order_market__eq__Chicago",
+      "attributes": {
+        "type": "metric",
+        "format": "percent",
+        "label": "Cart Conversion",
+        "segment": [
+          {
+            "name": "city",
+            "value": "Chicago"
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {
+      "key": "geid_218_0",
+      "source": "total_orders_calc",
+      "target": "total_carts",
+      "attributes": {
+        "type": "arithmetic"
+      }
+    },
+    {
+      "key": "geid_218_1",
+      "source": "total_orders_calc",
+      "target": "cart_conversion",
+      "attributes": {
+        "type": "arithmetic"
+      }
+    },
+    {
+      "key": "geid_219_0",
+      "source": "total_orders_calc__first_order_market__eq__New_York",
+      "target": "total_carts__first_order_market__eq__New_York",
+      "attributes": {
+        "type": "arithmetic"
+      }
+    },
+    {
+      "key": "geid_219_1",
+      "source": "total_orders_calc__first_order_market__eq__New_York",
+      "target": "cart_conversion__first_order_market__eq__New_York",
+      "attributes": {
+        "type": "arithmetic"
+      }
+    },
+    {
+      "key": "geid_219_2",
+      "source": "total_orders_calc",
+      "target": "total_orders_calc__first_order_market__eq__New_York",
+      "attributes": {
+        "type": "segmentation"
+      }
+    },
+    {
+      "key": "geid_219_3",
+      "source": "total_orders_calc__first_order_market__eq__Boston",
+      "target": "total_carts__first_order_market__eq__Boston",
+      "attributes": {
+        "type": "arithmetic"
+      }
+    },
+    {
+      "key": "geid_219_4",
+      "source": "total_orders_calc__first_order_market__eq__Boston",
+      "target": "cart_conversion__first_order_market__eq__Boston",
+      "attributes": {
+        "type": "arithmetic"
+      }
+    },
+    {
+      "key": "geid_219_5",
+      "source": "total_orders_calc",
+      "target": "total_orders_calc__first_order_market__eq__Boston",
+      "attributes": {
+        "type": "segmentation"
+      }
+    },
+    {
+      "key": "geid_219_6",
+      "source": "total_orders_calc__first_order_market__eq__Chicago",
+      "target": "total_carts__first_order_market__eq__Chicago",
+      "attributes": {
+        "type": "arithmetic"
+      }
+    },
+    {
+      "key": "geid_219_7",
+      "source": "total_orders_calc__first_order_market__eq__Chicago",
+      "target": "cart_conversion__first_order_market__eq__Chicago",
+      "attributes": {
+        "type": "arithmetic"
+      }
+    },
+    {
+      "key": "geid_219_8",
+      "source": "total_orders_calc",
+      "target": "total_orders_calc__first_order_market__eq__Chicago",
+      "attributes": {
+        "type": "segmentation"
+      }
+    }
+  ]
+}

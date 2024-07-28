@@ -1,0 +1,23 @@
+{
+  "name": "@exp/tree",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "jest --passWithNoTests"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "date-fns": "^3.3.1",
+    "graphology": "^0.25.4",
+    "graphology-traversal": "^0.3.1",
+    "graphology-types": "^0.24.7"
+  },
+  "peerDependencies": {
+    "date-fns": "^3.3.1",
+    "graphology": "^0.25.4",
+    "graphology-traversal": "^0.3.1"
+  }
+}
