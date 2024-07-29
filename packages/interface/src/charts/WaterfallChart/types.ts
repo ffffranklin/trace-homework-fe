@@ -44,12 +44,29 @@ export type ChangeColumn = {
   value: number;
 };
 
+export type EndColumn = {
+  type: ColumnType.End;
+  /** The label for the column, displayed on the y-axis. */
+  label: string;
+  /** The numeric value of the column, to be formatted based on the specified format. */
+  value: number;
+};
+
+export type Column = StartColumn | ChangeColumn | EndColumn;
+
 /**
  * Custom type representing the provided series of columns for the waterfall chart.
  * It starts with a StartColumn, followed by one or more ChangeColumns.
  * Each column includes a label for the y-axis, reflecting its identity or description.
  */
 export type Series = [StartColumn, ...ChangeColumn[]];
+
+export type WaterfallStep = {
+  name: 'start' | string | 'end';
+  columnLabel: string | null;
+  columnType: ColumnType;
+  columnValue: number;
+}
 
 /**
  * Prop types for the Waterfall Chart component.

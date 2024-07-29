@@ -1,9 +1,47 @@
-import { ChangeColumn, ColumnType, Series, StartColumn } from "./types";
+import { ChangeColumn, ColumnType, Series, StartColumn, WaterfallStep } from "./types";
 import { faker } from "@faker-js/faker";
 import { chartService } from "./WaterfallChart";
 
 describe('WaterfallChart', () => {
   describe('chartService', () => {
+    describe('when waterfall data is generated', () => {
+      it('should map columns to steps and add end step', () => {
+        const series: Series = [
+          startColumn({ value: faker.number.int({ min: -100, max: 100 }) }),
+          changeColumn({ value: faker.number.int({ min: -100, max: 100 }) }),
+          changeColumn({ value: faker.number.int({ min: -100, max: 100 }) }),
+        ]
+        const actual = chartService.waterfallData(series)
+        const expected: WaterfallStep[] = [
+          {
+            name: 'start',
+            columnType: series[0].type,
+            columnLabel: series[0].label,
+            columnValue: series[0].value,
+          },
+          {
+            name: '0',
+            columnType: series[1].type,
+            columnLabel: series[1].label,
+            columnValue: series[1].value,
+          },
+          {
+            name: '1',
+            columnType: series[2].type,
+            columnLabel: series[2].label,
+            columnValue: series[2].value,
+          },
+          {
+            name: 'end',
+            columnType: ColumnType.End,
+            columnLabel: null,
+            columnValue: series[0].value + series[1].value + series[2].value,
+          }
+        ]
+
+        expect(actual).toEqual(expected);
+      });
+    })
     describe('when series scale is retrieved', () => {
       it('should generate from series', () => {
         const series: Series = [

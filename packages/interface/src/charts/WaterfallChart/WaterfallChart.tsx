@@ -1,11 +1,36 @@
 import cx from "classnames";
 import React, { FunctionComponent } from "react";
 import styles from "./WaterfallChart.module.scss";
-import { Series, WaterfallChartProps } from "./types";
+import { ColumnType, Series, WaterfallChartProps, WaterfallStep } from "./types";
 import { scaleOrdinal } from "@visx/scale";
 
 
 export const chartService = {
+  waterfallData(series: Series): WaterfallStep[] {
+    const start: WaterfallStep = {
+      name: 'start',
+      columnLabel: series[0].label,
+      columnType: series[0].type,
+      columnValue: series[0].value,
+    }
+
+    const changes: WaterfallStep[] = series.slice(1).map((column, index) => ({
+      name: index.toString(),
+      columnLabel: column.label,
+      columnType: column.type,
+      columnValue: column.value,
+    }))
+
+    const end: WaterfallStep = {
+      name: 'end',
+      columnType: ColumnType.End,
+      columnLabel: null,
+      columnValue: series.map((c)=> c.value).reduce((a, b) => a + b),
+    }
+
+    return [start, ...changes, end];
+  },
+
   getOrdinalScale(columns: Series): any {
     return scaleOrdinal({
       domain: columns.map((c, index) => c.value),
