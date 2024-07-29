@@ -49,7 +49,7 @@ export type ChangeColumn = {
  * It starts with a StartColumn, followed by one or more ChangeColumns.
  * Each column includes a label for the y-axis, reflecting its identity or description.
  */
-type Series = [StartColumn, ...ChangeColumn[]];
+export type Series = [StartColumn, ...ChangeColumn[]];
 
 /**
  * Prop types for the Waterfall Chart component.
