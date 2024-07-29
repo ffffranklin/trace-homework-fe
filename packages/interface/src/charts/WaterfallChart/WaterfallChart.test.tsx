@@ -1,14 +1,14 @@
-import {ChangeColumn, ColumnType, Series, StartColumn} from "./types";
-import {faker} from "@faker-js/faker";
-import {chartService} from "./WaterfallChart";
+import { ChangeColumn, ColumnType, Series, StartColumn } from "./types";
+import { faker } from "@faker-js/faker";
+import { chartService } from "./WaterfallChart";
 
 describe('WaterfallChart', () => {
-  describe('chartService', ()=> {
-    describe('when series scale is retrieved', ()=> {
-      it('should generate from series', ()=> {
+  describe('chartService', () => {
+    describe('when series scale is retrieved', () => {
+      it('should generate from series', () => {
         const series: Series = [
-          startColumn({ value: -10}),
-          changeColumn({ value: 100}),
+          startColumn({ value: -10 }),
+          changeColumn({ value: 100 }),
         ]
         const actual = chartService.getOrdinalScale(series);
         actual.tickFormat
@@ -22,18 +22,18 @@ describe('WaterfallChart', () => {
   })
 })
 
-function column( {type, value}: { type: ColumnType.Start | ColumnType.Change, value?: number})  {
+function column({ type, value }: { type: ColumnType.Start | ColumnType.Change, value?: number }) {
   return ({
     type,
     label: faker.lorem.word(),
-    value: value || faker.number.int({min: -1000, max:1000}),
+    value: value || faker.number.int({ min: -1000, max: 1000 }),
   });
 }
 
-function changeColumn({ value }: {value?: number}={}): ChangeColumn {
-  return column({type: ColumnType.Change, value}) as ChangeColumn
+function changeColumn({ value }: { value?: number } = {}): ChangeColumn {
+  return column({ type: ColumnType.Change, value }) as ChangeColumn
 }
 
-function startColumn({ value }: {value?: number}={}): StartColumn{
-  return column({type: ColumnType.Start, value}) as StartColumn
+function startColumn({ value }: { value?: number } = {}): StartColumn {
+  return column({ type: ColumnType.Start, value }) as StartColumn
 }

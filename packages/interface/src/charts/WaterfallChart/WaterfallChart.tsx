@@ -1,15 +1,15 @@
 import cx from "classnames";
 import React, { FunctionComponent } from "react";
 import styles from "./WaterfallChart.module.scss";
-import {Series, WaterfallChartProps} from "./types";
-import {scaleOrdinal} from "@visx/scale";
+import { Series, WaterfallChartProps } from "./types";
+import { scaleOrdinal } from "@visx/scale";
 
 
 export const chartService = {
   getOrdinalScale(columns: Series): any {
     return scaleOrdinal({
-      domain: columns.map((c, index)=> c.value),
-      range: columns.map((c, index)=> index),
+      domain: columns.map((c, index) => c.value),
+      range: columns.map((c, index) => index),
     })
   }
 }

@@ -52,7 +52,7 @@ export const Primary: Story = {
   },
   decorators: [
     (Story) => {
-      return <Story />;
+      return <Story/>;
     },
   ],
 };
