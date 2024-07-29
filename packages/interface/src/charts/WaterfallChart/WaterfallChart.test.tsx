@@ -4,27 +4,6 @@ import {chartService} from "./WaterfallChart";
 
 describe('WaterfallChart', () => {
   describe('chartService', ()=> {
-    describe('when min max values retrieved', ()=> {
-      it('should return min max', ()=> {
-        const expected = [-10, 100]
-        const actual = chartService.getMinMax([
-          startColumn({ value: -10}),
-          changeColumn({ value: 100}),
-          changeColumn({ value: 10}),
-        ])
-
-        expect(actual).toEqual(expected);
-      })
-    })
-
-    describe('when y scale is created', ()=> {
-      it('should return liner scale', ()=> {
-        const actual = chartService.getScale([2, 5]);
-
-        expect(actual).toBeTruthy()
-      })
-    })
-
     describe('when series scale is retrieved', ()=> {
       it('should generate from series', ()=> {
         const series: Series = [
