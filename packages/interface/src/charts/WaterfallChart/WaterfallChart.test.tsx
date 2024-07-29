@@ -1,4 +1,4 @@
-import {ChangeColumn, ColumnType, StartColumn} from "./types";
+import {ChangeColumn, ColumnType, Series, StartColumn} from "./types";
 import {faker} from "@faker-js/faker";
 import {chartService} from "./WaterfallChart";
 
@@ -22,6 +22,22 @@ describe('WaterfallChart', () => {
         const actual = chartService.getScale([2, 5]);
 
         expect(actual).toBeTruthy()
+      })
+    })
+
+    describe('when series scale is retrieved', ()=> {
+      it('should generate from series', ()=> {
+        const series: Series = [
+          startColumn({ value: -10}),
+          changeColumn({ value: 100}),
+        ]
+        const actual = chartService.getOrdinalScale(series);
+        actual.tickFormat
+        expect(actual.range()).toEqual([0, 1]);
+        expect(actual.domain()).toEqual([
+          series[0].value,
+          series[1].value,
+        ]);
       })
     })
   })

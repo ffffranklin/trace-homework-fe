@@ -2,7 +2,7 @@ import cx from "classnames";
 import React, { FunctionComponent } from "react";
 import styles from "./WaterfallChart.module.scss";
 import {Series, WaterfallChartProps} from "./types";
-import {scaleLinear} from "@visx/scale";
+import {scaleLinear, scaleOrdinal} from "@visx/scale";
 
 
 export const chartService = {
@@ -13,6 +13,13 @@ export const chartService = {
 
   getScale([min, max]: [number, number]): any {
     return  scaleLinear({domain: [min, max]})
+  },
+
+  getOrdinalScale(columns: Series): any {
+    return scaleOrdinal({
+      domain: columns.map((c, index)=> c.value),
+      range: columns.map((c, index)=> index),
+    })
   }
 }
 
