@@ -47,6 +47,10 @@ describe('WaterfallChart', () => {
       it.todo('should derive height to fit view port')
     })
 
+    describe('when chart width is retrieved', ()=> {
+      it.todo('should derive height to fit view port')
+    })
+
     describe('when series scale is retrieved', () => {
       it('should generate from series', () => {
         const height = faker.number.int({min: 0})

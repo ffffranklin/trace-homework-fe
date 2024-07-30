@@ -3,6 +3,7 @@ import React, { FunctionComponent } from "react";
 import styles from "./WaterfallChart.module.scss";
 import { ColumnType, Series, WaterfallChartProps, WaterfallStep } from "./types";
 import { scaleLinear } from "@visx/scale";
+import { AxisLeft } from "@visx/axis";
 
 export const chartService = Object.freeze({
   MIN_WIDTH: 300,
@@ -11,6 +12,7 @@ export const chartService = Object.freeze({
   MARGIN_RIGHT: 10,
   MARGIN_BOTTOM: 10,
   MARGIN_LEFT: 10,
+  LEFT_AXIS_MARGIN_TOP: 10,
 
   waterfallData(series: Series): WaterfallStep[] {
     const start: WaterfallStep = {
@@ -50,14 +52,23 @@ export const chartService = Object.freeze({
       domain: [data.length, 0],
       range: [height, 0],
     })
-  }
+  },
+
+  leftScaleTickFormat(value: unknown, index: number, ticks: any[]) {
+    return index === 0 && 'start' || index === ticks[ticks.length - 1].index && 'end' || `${value}`
+  },
+
+  leftScaleTickValues(data: WaterfallStep[]) {
+    return data.map((v, index) => index + 0.5)
+  },
 });
 
 export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   props
 ) => {
-  const { className } = props;
+  const { className, series } = props;
 
+  const data = chartService.waterfallData(series);
   const width = window.innerWidth;
   const height = window.innerHeight;
   const chartHeight = chartService.getChartHeight(height);
@@ -66,7 +77,13 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   return (
     <div className={cx(styles["waterfall-chart"], className)}>
       <svg height={chartHeight} width={chartWidth}>
-
+        <AxisLeft
+          scale={chartService.getLeftScale(data, chartHeight)}
+          left={40}
+          top={chartService.LEFT_AXIS_MARGIN_TOP}
+          tickFormat={chartService.leftScaleTickFormat}
+          tickValues={chartService.leftScaleTickValues(data)}
+        />
       </svg>
     </div>
   );
