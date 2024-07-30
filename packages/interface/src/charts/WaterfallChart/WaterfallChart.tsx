@@ -15,6 +15,7 @@ export const chartService = Object.freeze({
   MARGIN_BOTTOM: 10,
   MARGIN_LEFT: 10,
   LEFT_AXIS_MARGIN_TOP: 10,
+  BAR_HEIGHT: 20,
 
   waterfallData(series: Series): WaterfallStep[] {
     const start: WaterfallStep = {
@@ -76,6 +77,7 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   const chartHeight = chartService.getChartHeight(height);
   const chartWidth = chartService.getChartWidth(width)
   const leftAxisScale = chartService.getLeftScale(data, chartHeight);
+  const barGroupOffsetY = chartService.LEFT_AXIS_MARGIN_TOP + leftAxisScale(0.38);
   const xScale = scaleLinear({
     domain: [data.map(step => step.columnValue).reduce((v, accu) => Math.max(v, accu)), 0],
     range: [chartWidth, 0]
@@ -91,17 +93,16 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
           tickFormat={chartService.leftScaleTickFormat}
           tickValues={chartService.leftScaleTickValues(data)}
         />
-        <Group>
+        <Group top={barGroupOffsetY}>
           {data.map((step, index) => {
             const barWidth = Math.abs(xScale(step.columnValue));
-            const barHeight = 20;
-            const barX = 30;
+            const barHeight = chartService.BAR_HEIGHT;
+            const barX = 50;
             const barY = leftAxisScale(index);
 
             return (
-              <Group>
+              <Group key={`step-${step.name}`}>
                 <Bar
-                  key={`bar-${step.name}`}
                   width={barWidth}
                   height={barHeight}
                   x={barX}
