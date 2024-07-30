@@ -42,6 +42,11 @@ describe('WaterfallChart', () => {
         expect(actual).toEqual(expected);
       });
     })
+
+    describe('when chart height is retrieved', ()=> {
+      it.todo('should derive height to fit view port')
+    })
+
     describe('when series scale is retrieved', () => {
       it('should generate from series', () => {
         const series: Series = [

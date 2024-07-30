@@ -4,8 +4,13 @@ import styles from "./WaterfallChart.module.scss";
 import { ColumnType, Series, WaterfallChartProps, WaterfallStep } from "./types";
 import { scaleOrdinal } from "@visx/scale";
 
+export const chartService = Object.freeze({
+  MIN_WIDTH: 300,
+  MARGIN_TOP: 10,
+  MARGIN_RIGHT: 10,
+  MARGIN_BOTTOM: 10,
+  MARGIN_LEFT: 10,
 
-export const chartService = {
   waterfallData(series: Series): WaterfallStep[] {
     const start: WaterfallStep = {
       name: 'start',
@@ -31,21 +36,37 @@ export const chartService = {
     return [start, ...changes, end];
   },
 
+  getChartHeight(outerHeight: number): number {
+    return outerHeight - this.MARGIN_TOP - this.MARGIN_BOTTOM
+  },
+
+  getChartWidth(outerWidth: number): number {
+    return Math.max(this.MIN_WIDTH, outerWidth - this.MARGIN_LEFT - this.MARGIN_RIGHT)
+  },
+
   getOrdinalScale(columns: Series): any {
     return scaleOrdinal({
       domain: columns.map((c, index) => c.value),
       range: columns.map((c, index) => index),
     })
   }
-}
+});
 
 export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   props
 ) => {
-  const { className } = props;
+  const { className  } = props;
+
+  const width= 500;
+  const height = 500;
+  const chartHeight = chartService.getChartHeight(height);
+  const chartWidth = chartService.getChartWidth(width)
+
   return (
     <div className={cx(styles["waterfall-chart"], className)}>
-      Your waterfall chart
+      <svg height={chartHeight} width={chartWidth}>
+
+      </svg>
     </div>
   );
 };
