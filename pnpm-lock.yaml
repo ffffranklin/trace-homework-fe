@@ -49,6 +49,9 @@ importers:
       '@visx/axis':
         specifier: ^3.10.1
         version: 3.10.1(react@18.2.0)
+      '@visx/group':
+        specifier: ^3.3.0
+        version: 3.3.0(react@18.2.0)
       '@visx/scale':
         specifier: ^3.5.0
         version: 3.5.0
