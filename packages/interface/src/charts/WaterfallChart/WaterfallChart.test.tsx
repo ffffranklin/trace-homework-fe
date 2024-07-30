@@ -49,23 +49,24 @@ describe('WaterfallChart', () => {
 
     describe('when series scale is retrieved', () => {
       it('should generate from series', () => {
-        const series: Series = [
+        const height = faker.number.int({min: 0})
+        const data: WaterfallStep[] = chartService.waterfallData([
           startColumn({ value: -10 }),
           changeColumn({ value: 100 }),
-        ]
-        const actual = chartService.getOrdinalScale(series);
+        ]);
+        const actual = chartService.getLeftScale(data, height);
         actual.tickFormat
-        expect(actual.range()).toEqual([0, 1]);
+        expect(actual.range()).toEqual([height, 0]);
         expect(actual.domain()).toEqual([
-          series[0].value,
-          series[1].value,
+          data.length,
+          0,
         ]);
       })
     })
   })
 })
 
-function column({ type, value }: { type: ColumnType.Start | ColumnType.Change, value?: number }) {
+function column({ type, value }: { type: ColumnType, value?: number }) {
   return ({
     type,
     label: faker.lorem.word(),

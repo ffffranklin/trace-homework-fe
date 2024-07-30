@@ -2,7 +2,7 @@ import cx from "classnames";
 import React, { FunctionComponent } from "react";
 import styles from "./WaterfallChart.module.scss";
 import { ColumnType, Series, WaterfallChartProps, WaterfallStep } from "./types";
-import { scaleOrdinal } from "@visx/scale";
+import { scaleLinear } from "@visx/scale";
 
 export const chartService = Object.freeze({
   MIN_WIDTH: 300,
@@ -45,10 +45,10 @@ export const chartService = Object.freeze({
     return Math.max(this.MIN_WIDTH, outerWidth - this.MARGIN_LEFT - this.MARGIN_RIGHT)
   },
 
-  getOrdinalScale(columns: Series): any {
-    return scaleOrdinal({
-      domain: columns.map((c, index) => c.value),
-      range: columns.map((c, index) => index),
+  getLeftScale(data: WaterfallStep[], height: number): any {
+    return scaleLinear({
+      domain: [data.length, 0],
+      range: [height, 0],
     })
   }
 });
