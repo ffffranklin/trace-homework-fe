@@ -4,6 +4,8 @@ import styles from "./WaterfallChart.module.scss";
 import { ColumnType, Series, WaterfallChartProps, WaterfallStep } from "./types";
 import { scaleLinear } from "@visx/scale";
 import { AxisLeft } from "@visx/axis";
+import { Group } from "@visx/group";
+import { Bar } from "@visx/shape";
 
 export const chartService = Object.freeze({
   MIN_WIDTH: 300,
@@ -73,17 +75,42 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   const height = window.innerHeight;
   const chartHeight = chartService.getChartHeight(height);
   const chartWidth = chartService.getChartWidth(width)
+  const leftAxisScale = chartService.getLeftScale(data, chartHeight);
+  const xScale = scaleLinear({
+    domain: [data.map(step => step.columnValue).reduce((v, accu) => Math.max(v, accu)), 0],
+    range: [chartWidth, 0]
+  });
 
   return (
     <div className={cx(styles["waterfall-chart"], className)}>
       <svg height={chartHeight} width={chartWidth}>
         <AxisLeft
-          scale={chartService.getLeftScale(data, chartHeight)}
+          scale={leftAxisScale}
           left={40}
           top={chartService.LEFT_AXIS_MARGIN_TOP}
           tickFormat={chartService.leftScaleTickFormat}
           tickValues={chartService.leftScaleTickValues(data)}
         />
+        <Group>
+          {data.map((step, index) => {
+            const barWidth = Math.abs(xScale(step.columnValue));
+            const barHeight = 20;
+            const barX = 30;
+            const barY = leftAxisScale(index);
+
+            return (
+              <Group>
+                <Bar
+                  key={`bar-${step.name}`}
+                  width={barWidth}
+                  height={barHeight}
+                  x={barX}
+                  y={barY}
+                />
+              </Group>
+            )
+          })}
+        </Group>
       </svg>
     </div>
   );
