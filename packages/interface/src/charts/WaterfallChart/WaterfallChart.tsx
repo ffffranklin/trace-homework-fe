@@ -6,6 +6,7 @@ import { scaleOrdinal } from "@visx/scale";
 
 export const chartService = Object.freeze({
   MIN_WIDTH: 300,
+  MIN_HEIGHT: 50,
   MARGIN_TOP: 10,
   MARGIN_RIGHT: 10,
   MARGIN_BOTTOM: 10,
@@ -30,7 +31,7 @@ export const chartService = Object.freeze({
       name: 'end',
       columnType: ColumnType.End,
       columnLabel: null,
-      columnValue: series.map((c)=> c.value).reduce((a, b) => a + b),
+      columnValue: series.map((c) => c.value).reduce((a, b) => a + b),
     }
 
     return [start, ...changes, end];
@@ -55,10 +56,10 @@ export const chartService = Object.freeze({
 export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   props
 ) => {
-  const { className  } = props;
+  const { className } = props;
 
-  const width= 500;
-  const height = 500;
+  const width = window.innerWidth;
+  const height = window.innerHeight;
   const chartHeight = chartService.getChartHeight(height);
   const chartWidth = chartService.getChartWidth(width)
 
