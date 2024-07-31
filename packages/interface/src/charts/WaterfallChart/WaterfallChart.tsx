@@ -79,7 +79,7 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   const leftAxisScale = chartService.getLeftScale(data, chartHeight);
   const barGroupOffsetY = chartService.LEFT_AXIS_MARGIN_TOP + leftAxisScale(0.38);
   const xScale = scaleLinear({
-    domain: [data.map(step => step.columnValue).reduce((v, accu) => Math.max(v, accu)), 0],
+    domain: [data.map(step => step.value).reduce((v, accu) => Math.max(v, accu)), 0],
     range: [chartWidth, 0]
   });
 
@@ -95,7 +95,7 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
         />
         <Group top={barGroupOffsetY}>
           {data.map((step, index) => {
-            const barWidth = Math.abs(xScale(step.columnValue));
+            const barWidth = Math.abs(xScale(step.value));
             const barHeight = chartService.BAR_HEIGHT;
             const barX = 50;
             const barY = leftAxisScale(index);

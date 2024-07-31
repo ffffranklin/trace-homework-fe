@@ -49,7 +49,7 @@ export type EndColumn = {
   /** The label for the column, displayed on the y-axis. */
   label: string;
   /** The numeric value of the column, to be formatted based on the specified format. */
-  value: number;
+  value: null;
 };
 
 export type Column = StartColumn | ChangeColumn | EndColumn;
@@ -63,9 +63,11 @@ export type Series = [StartColumn, ...ChangeColumn[]];
 
 export type WaterfallStep = {
   name: 'start' | string | 'end';
+  subtotal: number;
+  value: number;
   columnLabel: string | null;
   columnType: ColumnType;
-  columnValue: number;
+  columnValue: number | null;
 }
 
 /**

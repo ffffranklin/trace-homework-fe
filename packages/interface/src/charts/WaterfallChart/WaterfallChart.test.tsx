@@ -15,27 +15,35 @@ describe('WaterfallChart', () => {
         const expected: WaterfallStep[] = [
           {
             name: 'start',
+            subtotal: series[0].value,
+            value: series[0].value,
             columnType: series[0].type,
             columnLabel: series[0].label,
             columnValue: series[0].value,
           },
           {
             name: '0',
+            subtotal: series[0].value + series[1].value,
+            value: series[1].value,
             columnType: series[1].type,
             columnLabel: series[1].label,
             columnValue: series[1].value,
           },
           {
             name: '1',
+            subtotal: series[0].value + series[1].value + series[2].value,
+            value: series[2].value,
             columnType: series[2].type,
             columnLabel: series[2].label,
             columnValue: series[2].value,
           },
           {
             name: 'end',
+            subtotal: series[0].value + series[1].value + series[2].value,
+            value: series[0].value + series[1].value + series[2].value,
             columnType: ColumnType.End,
             columnLabel: null,
-            columnValue: series[0].value + series[1].value + series[2].value,
+            columnValue: null
           }
         ]
 
