@@ -7,7 +7,7 @@ import { AxisLeft } from "@visx/axis";
 import { Group } from "@visx/group";
 import { Bar } from "@visx/shape";
 
-export const chartService = Object.freeze({
+export const chartService = {
   BAR_GROUP_LEFT_MARGIN: 50,
   BAR_HEIGHT: 20,
   LEFT_AXIS_MARGIN_TOP: 10,
@@ -71,7 +71,17 @@ export const chartService = Object.freeze({
   leftScaleTickValues(data: WaterfallStep[]) {
     return data.map((v, index) => index + 0.5)
   },
-});
+
+  xBarOffset(prevStep: WaterfallStep, step: WaterfallStep, index: number) {
+    if (step.columnType === ColumnType.Start || step.columnType === ColumnType.End) return 0;
+
+    if (step.value >= 0) {
+      return prevStep.subtotal;
+    } else {
+      return step.subtotal;
+    }
+  },
+};
 
 export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   props
@@ -91,16 +101,6 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
     range: [chartWidth, 0]
   });
 
-  function xBarOffset(step: WaterfallStep, index: number ) {
-    if (step.columnType === ColumnType.Start || step.columnType === ColumnType.End) return 0;
-
-    if (step.value >= 0) {
-      return data[index - 1].subtotal;
-    } else {
-      return step.subtotal;
-    }
-  }
-
   return (
     <div className={cx(styles["waterfall-chart"], className)}>
       <svg height={chartHeight} width={chartWidth}>
@@ -115,7 +115,7 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
           {data.map((step, index) => {
             const barWidth = Math.abs(xScale(step.value));
             const barHeight = chartService.BAR_HEIGHT;
-            const barX = xScale(xBarOffset(step, index));
+            const barX = xScale(chartService.xBarOffset(data[index - 1], step, index));
             const barY = leftAxisScale(index);
 
             return (
