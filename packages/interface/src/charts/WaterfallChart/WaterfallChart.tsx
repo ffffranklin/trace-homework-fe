@@ -10,15 +10,22 @@ import { Bar, Line } from "@visx/shape";
 export const theme = {
   light: {
     colors: {
-      lines: "#000"
+      text: '#626b76',
+      lines: '#626b76',
+      bar: ['#db3f6d', '#9fa9b7', '#74d28a'], // [red, grey, green]
+      barLabel: '#000'
     }
   },
   dark: {
     colors: {
-      lines: "#ddd"
+      text: '#737780',
+      lines: '#737780',
+      bar: ['#5e1a2e', '#5a616a', '#26482e'], // [red, grey, green]
+      barLabel: '#d0d2d5'
     }
   }
-}
+};
+
 export const chartService = {
   BAR_GROUP_LEFT_MARGIN: 50,
   BAR_HEIGHT: 23,
@@ -29,7 +36,7 @@ export const chartService = {
   MARGIN_TOP: 10,
   MIN_HEIGHT: 50,
   MIN_WIDTH: 300,
-  PADDING_RIGHT: 5,
+  PADDING_RIGHT: (typeof window === "undefined") ? 0 : window.outerWidth * .025,
 
   waterfallData(series: Series): WaterfallStep[] {
     const start: WaterfallStep = {
@@ -94,6 +101,18 @@ export const chartService = {
       return step.subtotal;
     }
   },
+
+  barColor(step: WaterfallStep, [red, grey, green]: string[]) {
+    if (step.columnType === ColumnType.Start || step.columnType === ColumnType.End) {
+      return grey;
+    }
+
+    if (step.columnValue as number > 0) {
+      return green;
+    } else {
+      return red;
+    }
+  }
 };
 
 export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
@@ -101,6 +120,8 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
 ) => {
   const { className, series } = props;
 
+  const themeMode: 'light' | 'dark' = 'light';
+  const currTheme = theme[themeMode];
   const data = chartService.waterfallData(series);
   const width = window.innerWidth;
   const height = window.innerHeight;
@@ -123,9 +144,13 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
           top={chartService.LEFT_AXIS_MARGIN_TOP}
           tickFormat={chartService.leftScaleTickFormat}
           tickValues={chartService.leftScaleTickValues(data)}
+          tickStroke={currTheme.colors.lines}
+          tickLabelProps={({fill: currTheme.colors.text})}
+          stroke={currTheme.colors.lines}
         />
         <Group top={barGroupOffsetY} left={barGroupOffsetX}>
           {data.map((step, index) => {
+            const barColor = chartService.barColor(step, currTheme.colors.bar)
             const barWidth = Math.abs(xScale(step.value));
             const barHeight = chartService.BAR_HEIGHT;
             const barX = xScale(chartService.xBarOffset(data[index - 1], step, index));
@@ -142,12 +167,24 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
                   height={barHeight}
                   x={barX}
                   y={barY}
+                  fill={barColor}
                 />
                 <Line
                   from={{ x: lineX, y: lineY0 }}
                   to={{ x: lineX, y: lineY1 }}
-                  stroke="black"
+                  stroke={currTheme.colors.lines}
                 />
+                <text
+                  x={barX + barWidth}
+                  y={barY}
+                  fill={currTheme.colors.barLabel}
+                  fontSize={12}
+                  dx={"-0.5em"}
+                  dy={"1.3em"}
+                  className={cx(styles["bar-text"])}
+                >
+                  {step.value}
+                </text>
               </Group>
             )
           })}
