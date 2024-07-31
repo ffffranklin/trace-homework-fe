@@ -1,7 +1,7 @@
 import cx from "classnames";
 import React, { FunctionComponent, useState } from "react";
 import styles from "./WaterfallChart.module.scss";
-import { ColumnType, Series, Theme, WaterfallChartProps, WaterfallStep } from "./types";
+import { ColumnType, Format, Series, Theme, WaterfallChartProps, WaterfallStep } from "./types";
 import { scaleLinear } from "@visx/scale";
 import { AxisLeft } from "@visx/axis";
 import { Group } from "@visx/group";
@@ -38,11 +38,13 @@ export const chartService = {
   MIN_WIDTH: 300,
   PADDING_RIGHT: (typeof window === "undefined") ? 0 : window.outerWidth * .025,
 
-  waterfallData(series: Series): WaterfallStep[] {
+  waterfallData(series: Series, formatter?: (n: number) => string): WaterfallStep[] {
+    const val = (v: number): string => formatter ? formatter(v) : v.toString()
     const start: WaterfallStep = {
       name: 'start',
       subtotal: series[0].value,
       value: series[0].value,
+      formattedValue: val(series[0].value),
       columnLabel: series[0].label,
       columnType: series[0].type,
       columnValue: series[0].value,
@@ -52,6 +54,7 @@ export const chartService = {
       name: index.toString(),
       subtotal: series.slice(0, index + 2).map(c => c.value).reduce((a, b) => a + b),
       value: column.value,
+      formattedValue: val(column.value),
       columnLabel: column.label,
       columnType: column.type,
       columnValue: column.value,
@@ -61,6 +64,7 @@ export const chartService = {
       name: 'end',
       subtotal: series.map((c) => c.value).reduce((a, b) => a + b),
       value: series.map((c) => c.value).reduce((a, b) => a + b),
+      formattedValue: val(series.map((c) => c.value).reduce((a, b) => a + b)),
       columnType: ColumnType.End,
       columnLabel: null,
       columnValue: null,
@@ -123,13 +127,17 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   props
 ) => {
   // props
-  const { className, series, theme: themeMode } = props;
+  const { className, series, theme: themeMode, format } = props;
   // state
   const [omittedColumns, updateOmittedColums] = useState<string[]>([])
   // vars
   const currTheme = theme[themeMode];
   const seriesWithOmittedColumns = chartService.omitColumns(series, omittedColumns);
-  const data = chartService.waterfallData(seriesWithOmittedColumns)
+  const formatter: {[key: string]: (n: number)=> string} = {
+    [Format.Number]: (n: number)=> Number(n).toFixed(2),
+    [Format.Currency]: Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format
+  }
+  const data = chartService.waterfallData(seriesWithOmittedColumns, formatter[format])
   const width = window.innerWidth;
   const height = window.innerHeight;
   const chartHeight = chartService.getChartHeight(height);
@@ -195,7 +203,7 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
                   dy={"1.3em"}
                   className={cx(styles["bar-text"])}
                 >
-                  {step.value}
+                  {step.formattedValue}
                 </text>
               </Group>
             )

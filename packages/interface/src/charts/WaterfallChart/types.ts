@@ -70,6 +70,7 @@ export type WaterfallStep = {
   name: 'start' | string | 'end';
   subtotal: number;
   value: number;
+  formattedValue: string;
   columnLabel: string | null;
   columnType: ColumnType;
   columnValue: number | null;

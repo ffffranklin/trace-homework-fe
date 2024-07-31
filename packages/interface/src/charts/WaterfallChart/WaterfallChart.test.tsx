@@ -11,12 +11,14 @@ describe('WaterfallChart', () => {
           changeColumn({ value: faker.number.int({ min: -100, max: 100 }) }),
           changeColumn({ value: faker.number.int({ min: -100, max: 100 }) }),
         ]
-        const actual = chartService.waterfallData(series)
+        const formatter = (n: number)=> `$${n}`;
+        const actual = chartService.waterfallData(series, formatter)
         const expected: WaterfallStep[] = [
           {
             name: 'start',
             subtotal: series[0].value,
             value: series[0].value,
+            formattedValue: formatter(series[0].value),
             columnType: series[0].type,
             columnLabel: series[0].label,
             columnValue: series[0].value,
@@ -25,6 +27,7 @@ describe('WaterfallChart', () => {
             name: '0',
             subtotal: series[0].value + series[1].value,
             value: series[1].value,
+            formattedValue: formatter(series[1].value),
             columnType: series[1].type,
             columnLabel: series[1].label,
             columnValue: series[1].value,
@@ -33,6 +36,7 @@ describe('WaterfallChart', () => {
             name: '1',
             subtotal: series[0].value + series[1].value + series[2].value,
             value: series[2].value,
+            formattedValue: formatter(series[2].value),
             columnType: series[2].type,
             columnLabel: series[2].label,
             columnValue: series[2].value,
@@ -41,6 +45,7 @@ describe('WaterfallChart', () => {
             name: 'end',
             subtotal: series[0].value + series[1].value + series[2].value,
             value: series[0].value + series[1].value + series[2].value,
+            formattedValue: formatter(series[0].value + series[1].value + series[2].value),
             columnType: ColumnType.End,
             columnLabel: null,
             columnValue: null
