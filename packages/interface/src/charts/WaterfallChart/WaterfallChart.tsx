@@ -5,7 +5,7 @@ import { ColumnType, Series, WaterfallChartProps, WaterfallStep } from "./types"
 import { scaleLinear } from "@visx/scale";
 import { AxisLeft } from "@visx/axis";
 import { Group } from "@visx/group";
-import { Bar } from "@visx/shape";
+import { Bar, Line } from "@visx/shape";
 
 export const theme = {
   light: {
@@ -21,7 +21,7 @@ export const theme = {
 }
 export const chartService = {
   BAR_GROUP_LEFT_MARGIN: 50,
-  BAR_HEIGHT: 20,
+  BAR_HEIGHT: 23,
   LEFT_AXIS_MARGIN_TOP: 10,
   MARGIN_BOTTOM: 10,
   MARGIN_LEFT: 10,
@@ -29,6 +29,7 @@ export const chartService = {
   MARGIN_TOP: 10,
   MIN_HEIGHT: 50,
   MIN_WIDTH: 300,
+  PADDING_RIGHT: 5,
 
   waterfallData(series: Series): WaterfallStep[] {
     const start: WaterfallStep = {
@@ -106,7 +107,7 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   const chartHeight = chartService.getChartHeight(height);
   const chartWidth = chartService.getChartWidth(width)
   const leftAxisScale = chartService.getLeftScale(data, chartHeight);
-  const barGroupOffsetY = chartService.LEFT_AXIS_MARGIN_TOP + leftAxisScale(0.38);
+  const barGroupOffsetY = chartService.LEFT_AXIS_MARGIN_TOP + leftAxisScale(0.30);
   const barGroupOffsetX = chartService.BAR_GROUP_LEFT_MARGIN;
   const xScale = scaleLinear({
     domain: [data.map(step => step.value).reduce((v, accu) => Math.max(v, accu)), 0],
@@ -129,6 +130,10 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
             const barHeight = chartService.BAR_HEIGHT;
             const barX = xScale(chartService.xBarOffset(data[index - 1], step, index));
             const barY = leftAxisScale(index);
+            const lineLength = barHeight;
+            const lineY0 = barY + barHeight;
+            const lineY1 = lineY0 + lineLength;
+            const lineX = barX;
 
             return (
               <Group key={`step-${step.name}`}>
@@ -137,6 +142,11 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
                   height={barHeight}
                   x={barX}
                   y={barY}
+                />
+                <Line
+                  from={{ x: lineX, y: lineY0 }}
+                  to={{ x: lineX, y: lineY1 }}
+                  stroke="black"
                 />
               </Group>
             )
