@@ -78,7 +78,7 @@ export const chartService = {
   },
 
   leftScaleTickFormat(value: unknown, index: number, ticks: any[]) {
-    return index === 0 && 'start' || index === ticks[ticks.length - 1].index && 'end' || `${value}`
+    return index === 0 && 'start' || index === ticks[ticks.length - 1].index && 'end' || `${Math.floor(Number(value) - 1)}`
   },
 
   leftScaleTickValues(data: WaterfallStep[]) {
