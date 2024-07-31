@@ -8,18 +8,21 @@ import { Group } from "@visx/group";
 import { Bar } from "@visx/shape";
 
 export const chartService = Object.freeze({
-  MIN_WIDTH: 300,
-  MIN_HEIGHT: 50,
-  MARGIN_TOP: 10,
-  MARGIN_RIGHT: 10,
+  BAR_GROUP_LEFT_MARGIN: 50,
+  BAR_HEIGHT: 20,
+  LEFT_AXIS_MARGIN_TOP: 10,
   MARGIN_BOTTOM: 10,
   MARGIN_LEFT: 10,
-  LEFT_AXIS_MARGIN_TOP: 10,
-  BAR_HEIGHT: 20,
+  MARGIN_RIGHT: 10,
+  MARGIN_TOP: 10,
+  MIN_HEIGHT: 50,
+  MIN_WIDTH: 300,
 
   waterfallData(series: Series): WaterfallStep[] {
     const start: WaterfallStep = {
       name: 'start',
+      subtotal: series[0].value,
+      value: series[0].value,
       columnLabel: series[0].label,
       columnType: series[0].type,
       columnValue: series[0].value,
@@ -27,6 +30,8 @@ export const chartService = Object.freeze({
 
     const changes: WaterfallStep[] = series.slice(1).map((column, index) => ({
       name: index.toString(),
+      subtotal: series.slice(0, index + 2).map(c => c.value).reduce((a, b) => a + b),
+      value: column.value,
       columnLabel: column.label,
       columnType: column.type,
       columnValue: column.value,
@@ -34,9 +39,11 @@ export const chartService = Object.freeze({
 
     const end: WaterfallStep = {
       name: 'end',
+      subtotal: series.map((c) => c.value).reduce((a, b) => a + b),
+      value: series.map((c) => c.value).reduce((a, b) => a + b),
       columnType: ColumnType.End,
       columnLabel: null,
-      columnValue: series.map((c) => c.value).reduce((a, b) => a + b),
+      columnValue: null,
     }
 
     return [start, ...changes, end];
@@ -78,10 +85,21 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   const chartWidth = chartService.getChartWidth(width)
   const leftAxisScale = chartService.getLeftScale(data, chartHeight);
   const barGroupOffsetY = chartService.LEFT_AXIS_MARGIN_TOP + leftAxisScale(0.38);
+  const barGroupOffsetX = chartService.BAR_GROUP_LEFT_MARGIN;
   const xScale = scaleLinear({
     domain: [data.map(step => step.value).reduce((v, accu) => Math.max(v, accu)), 0],
     range: [chartWidth, 0]
   });
+
+  function xBarOffset(step: WaterfallStep, index: number ) {
+    if (step.columnType === ColumnType.Start || step.columnType === ColumnType.End) return 0;
+
+    if (step.value >= 0) {
+      return data[index - 1].subtotal;
+    } else {
+      return step.subtotal;
+    }
+  }
 
   return (
     <div className={cx(styles["waterfall-chart"], className)}>
@@ -93,11 +111,11 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
           tickFormat={chartService.leftScaleTickFormat}
           tickValues={chartService.leftScaleTickValues(data)}
         />
-        <Group top={barGroupOffsetY}>
+        <Group top={barGroupOffsetY} left={barGroupOffsetX}>
           {data.map((step, index) => {
             const barWidth = Math.abs(xScale(step.value));
             const barHeight = chartService.BAR_HEIGHT;
-            const barX = 50;
+            const barX = xScale(xBarOffset(step, index));
             const barY = leftAxisScale(index);
 
             return (
