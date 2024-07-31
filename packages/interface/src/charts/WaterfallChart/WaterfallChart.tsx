@@ -1,5 +1,5 @@
 import cx from "classnames";
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import styles from "./WaterfallChart.module.scss";
 import { ColumnType, Series, Theme, WaterfallChartProps, WaterfallStep } from "./types";
 import { scaleLinear } from "@visx/scale";
@@ -69,6 +69,10 @@ export const chartService = {
     return [start, ...changes, end];
   },
 
+  omitColumns(series: Series, omittedColumns: string[]): Series {
+    return series.filter(col => !omittedColumns.some(label => label === col.label)) as Series
+  },
+
   getChartHeight(outerHeight: number): number {
     return outerHeight - this.MARGIN_TOP - this.MARGIN_BOTTOM
   },
@@ -118,10 +122,14 @@ export const chartService = {
 export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   props
 ) => {
+  // props
   const { className, series, theme: themeMode } = props;
-
+  // state
+  const [omittedColumns, updateOmittedColums] = useState<string[]>([])
+  // vars
   const currTheme = theme[themeMode];
-  const data = chartService.waterfallData(series);
+  const seriesWithOmittedColumns = chartService.omitColumns(series, omittedColumns);
+  const data = chartService.waterfallData(seriesWithOmittedColumns)
   const width = window.innerWidth;
   const height = window.innerHeight;
   const chartHeight = chartService.getChartHeight(height);
@@ -144,7 +152,7 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
           tickFormat={chartService.leftScaleTickFormat}
           tickValues={chartService.leftScaleTickValues(data)}
           tickStroke={currTheme.colors.lines}
-          tickLabelProps={({fill: currTheme.colors.text})}
+          tickLabelProps={({ fill: currTheme.colors.text })}
           stroke={currTheme.colors.lines}
         />
         <Group top={barGroupOffsetY} left={barGroupOffsetX}>
@@ -167,6 +175,11 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
                   x={barX}
                   y={barY}
                   fill={barColor}
+                  onClick={() => {
+                    if (step.columnType === ColumnType.Change && step.columnLabel) {
+                      updateOmittedColums([...omittedColumns, step.columnLabel])
+                    }
+                  }}
                 />
                 <Line
                   from={{ x: lineX, y: lineY0 }}
