@@ -7,6 +7,18 @@ import { AxisLeft } from "@visx/axis";
 import { Group } from "@visx/group";
 import { Bar } from "@visx/shape";
 
+export const theme = {
+  light: {
+    colors: {
+      lines: "#000"
+    }
+  },
+  dark: {
+    colors: {
+      lines: "#ddd"
+    }
+  }
+}
 export const chartService = {
   BAR_GROUP_LEFT_MARGIN: 50,
   BAR_HEIGHT: 20,
