@@ -170,9 +170,8 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
             const barHeight = chartService.BAR_HEIGHT;
             const barX = xScale(chartService.xBarOffset(data[index - 1], step, index));
             const barY = leftAxisScale(index);
-            const lineLength = barHeight;
             const lineY0 = barY + barHeight;
-            const lineY1 = lineY0 + lineLength;
+            const lineY1 = lineY0 + leftAxisScale(0.57);
             const lineX = barX + (step.value < 0 ? 0 : barWidth);
 
             return (
