@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import { WaterfallChart } from "./WaterfallChart";
 import { ColumnType, Format, Theme } from "./types";
+import { within, expect } from "@storybook/test";
 
 const meta = {
   component: WaterfallChart,
@@ -56,6 +57,12 @@ export const Primary: Story = {
       return <Story/>;
     },
   ],
+  play: async ({args, canvasElement, })=> {
+    const canvas = within(canvasElement);
+    const chart = canvas.getByTestId("qa-waterfall-chart");
+    // test the  theme input
+    await expect(chart).toHaveStyle('background-color: #000')
+  },
   render(args, { globals }) {
     return (
       <WaterfallChart

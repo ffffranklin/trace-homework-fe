@@ -151,7 +151,7 @@ export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   });
 
   return (
-    <div className={cx(styles["waterfall-chart"], className, styles[props.theme])}>
+    <div className={cx(styles["waterfall-chart"], className, styles[props.theme])} data-testid="qa-waterfall-chart">
       <svg height={chartHeight} width={chartWidth}>
         <AxisLeft
           scale={leftAxisScale}
