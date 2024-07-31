@@ -118,9 +118,8 @@ export const chartService = {
 export const WaterfallChart: FunctionComponent<WaterfallChartProps> = (
   props
 ) => {
-  const { className, series } = props;
+  const { className, series, theme: themeMode } = props;
 
-  const themeMode: 'light' | 'dark' = 'light';
   const currTheme = theme[themeMode];
   const data = chartService.waterfallData(series);
   const width = window.innerWidth;

@@ -80,4 +80,6 @@ export type WaterfallChartProps = {
   format: Format;
   /** The series of columns to be rendered in the chart, each with a label for the y-axis. */
   series: Series;
+  /** Theme mode  for light and dark modes **/
+  theme: 'light' | 'dark';
 };
