@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import { WaterfallChart } from "./WaterfallChart";
-import { ColumnType, Format } from "./types";
+import { ColumnType, Format, Theme } from "./types";
 
 const meta = {
   component: WaterfallChart,
@@ -14,14 +14,9 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-const WaterfallChartWithGlobalTheme = (props: { series: any, format: any, globals: any }) => {
-  return (
-    <WaterfallChart series={props.series} format={props.format} theme={props.globals.backgrounds.value === '#333333' && 'dark' || 'light'}/>
-  )
-}
-
 export const Primary: Story = {
   args: {
+    theme: Theme.Dark,
     format: Format.Number,
     series: [
       {
@@ -62,6 +57,12 @@ export const Primary: Story = {
     },
   ],
   render(args, { globals }) {
-    return <WaterfallChartWithGlobalTheme globals={globals} series={args.series} format={args.format}/>
+    return (
+      <WaterfallChart
+        theme={globals.backgrounds.value === '#333333' && Theme.Dark || Theme.Light}
+        series={args.series}
+        format={args.format}
+      />
+    )
   }
 };

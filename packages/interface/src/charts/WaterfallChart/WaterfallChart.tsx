@@ -1,14 +1,14 @@
 import cx from "classnames";
 import React, { FunctionComponent } from "react";
 import styles from "./WaterfallChart.module.scss";
-import { ColumnType, Series, WaterfallChartProps, WaterfallStep } from "./types";
+import { ColumnType, Series, Theme, WaterfallChartProps, WaterfallStep } from "./types";
 import { scaleLinear } from "@visx/scale";
 import { AxisLeft } from "@visx/axis";
 import { Group } from "@visx/group";
 import { Bar, Line } from "@visx/shape";
 
 export const theme = {
-  light: {
+  [Theme.Light]: {
     colors: {
       text: '#626b76',
       lines: '#626b76',
@@ -16,7 +16,7 @@ export const theme = {
       barLabel: '#000'
     }
   },
-  dark: {
+  [Theme.Dark]: {
     colors: {
       text: '#737780',
       lines: '#737780',

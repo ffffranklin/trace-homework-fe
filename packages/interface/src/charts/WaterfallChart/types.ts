@@ -20,6 +20,11 @@ export enum Format {
   Number = "number",
 }
 
+export enum Theme {
+  Dark = 'dark',
+  Light = 'light',
+}
+
 /**
  * Represents a start column in the waterfall chart.
  * Holds the initial value of the series and includes a label for the y-axis.
@@ -81,5 +86,5 @@ export type WaterfallChartProps = {
   /** The series of columns to be rendered in the chart, each with a label for the y-axis. */
   series: Series;
   /** Theme mode  for light and dark modes **/
-  theme: 'light' | 'dark';
+  theme: Theme;
 };
