@@ -135,5 +135,9 @@ export type Tree = MultiDirectedGraph<TreeNode, TreeEdge, TreeInfo>;
 export type TableData = {
   schema: {
     name: string,
+  },
+  filters: {
+    date1: Date | undefined,
+    date2: Date | undefined,
   }
 };

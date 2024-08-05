@@ -1,4 +1,4 @@
-import { Tree, TableData } from "./types";
+import { TableData, Tree } from "./types";
 
 /**
  * Transforms a given tree structure into a table format suitable for
@@ -36,6 +36,10 @@ export function treeTable(
   return {
     schema: {
       name: 'ecommerce_performance'
+    },
+    filters: {
+      date1,
+      date2,
     }
   }
 }
