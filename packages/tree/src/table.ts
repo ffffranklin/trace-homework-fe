@@ -35,7 +35,12 @@ export function treeTable(
   if (!tree) throw "implement me";
 
   const nodeFields = ['total_orders_calc', 'cart_conversion', 'total_carts'];
-  const columnsMap: { [p: string]: TableDataColumn | undefined } = Object.fromEntries(nodeFields.map(nf => [nf]));
+  const columnsMap = new Map<string, TableDataColumn>()
+
+  columnsMap.set('segment', {
+    field: 'segment', label: '', format: 'string'
+  })
+
   // const segments = [];
   // const metrics = [];
   // const data = []
@@ -43,11 +48,11 @@ export function treeTable(
     const { format, label } = attributes;
 
     if (nodeFields.includes(node)) {
-      columnsMap[node] = {
+      columnsMap.set(node, {
         format,
         label,
         field: node
-      };
+      })
     }
 
     tree.edges(node).map((e) => {
@@ -61,11 +66,11 @@ export function treeTable(
       if (attrs.type === EdgeType.Arithmetic) {
         // handle arithmetic
         if (nodeFields.includes(node)) {
-          columnsMap[target] = {
+          columnsMap.set(target, {
             format: targetAttrs.format,
             label: targetAttrs.label,
             field: target
-          };
+          })
         }
       }
     })
@@ -73,13 +78,14 @@ export function treeTable(
     return depth === 0;
   })
 
+  const columns: TableDataColumn[] = ['segment', 'total_orders_calc', 'cart_conversion', 'total_carts']
+    .filter((field)=> columnsMap.has(field))
+    .map((field)=> columnsMap.get(field) as TableDataColumn)
+
   return {
     schema: {
       name: 'ecommerce_performance',
-      columns: [
-        { field: 'segment', label: '', format: 'string' },
-        ...nodeFields.map(k => columnsMap[k] as TableDataColumn)
-      ]
+      columns,
     },
     filters: {
       date1,
