@@ -1,4 +1,5 @@
 import { MultiDirectedGraph } from "graphology";
+import { ValueFormat } from "@exp/commons";
 
 /**
  * Represents the unique identifier for nodes within the graph.
@@ -47,12 +48,7 @@ export type Segment = {
 /**
  * Enumerates the formats that a node's value can take, such as currency, integer, or decimal.
  */
-export enum ValueFormat {
-  Currency = "currency",
-  Integer = "integer",
-  Decimal = "decimal",
-  Percent = "percent",
-}
+export { ValueFormat } from '@exp/commons';
 
 /**
  * Enumerates the types of nodes within the graph: Metric or Operator.
@@ -130,31 +126,8 @@ export type TreeInfo = {
  */
 export type Tree = MultiDirectedGraph<TreeNode, TreeEdge, TreeInfo>;
 
-export interface TableDataColumn {
-  field: string;
-  label: string;
-  format: ValueFormat | 'string';
-}
+export { TableDataColumn } from '@exp/commons'
 
-export interface TableDataRow {
-  segment: string,
-  date: Date,
-  conversion: number | null,
-  total_carts: number | null,
-  total_orders_calc: number | null,
-}
+export { TableDataRow } from '@exp/commons'
 
-/**
- * TODO: IMPLEMENT THIS
- */
-export type TableData = {
-  schema: {
-    name: string,
-    columns: TableDataColumn[]
-  },
-  filters: {
-    date1: Date | undefined,
-    date2: Date | undefined,
-  }
-  data: TableDataRow[]
-};
+export { TableData } from '@exp/commons';

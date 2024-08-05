@@ -33,6 +33,7 @@
     "sass": "^1.70.0"
   },
   "dependencies": {
+    "@exp/commons": "workspace:^1.0.0",
     "@visx/axis": "^3.10.1",
     "@visx/group": "^3.3.0",
     "@visx/scale": "^3.5.0",

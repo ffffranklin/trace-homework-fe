@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      '@exp/commons':
+        specifier: workspace:^1.0.0
+        version: link:packages/commons
     devDependencies:
       '@types/jest':
         specifier: ^29.5.11
@@ -46,6 +50,9 @@ importers:
 
   packages/interface:
     dependencies:
+      '@exp/commons':
+        specifier: workspace:^1.0.0
+        version: link:../commons
       '@visx/axis':
         specifier: ^3.10.1
         version: 3.10.1(react@18.2.0)
