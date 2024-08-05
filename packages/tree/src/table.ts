@@ -44,43 +44,38 @@ export function treeTable(
 
   const data: TableDataRow[] = []
 
-  function groupNodesBySegment(node: string, attributes: TreeNode, override?: string | number) {
+  function updateSegment(name: string | number, attrs: TreeNode) {
+    segments[name] = [...(segments[name] || []), attrs]
+  }
+
+  function updateColumns(field: string, { format, label }: TreeNode) {
+    columnsMap.set(field, { format, label, field })
+  }
+
+  function groupNodesBySegment(node: string, attributes: TreeNode, override?: string | number | null) {
     const segmentName = attributes.segment[0]?.value || 'Overall'
-    if (nodeFields.some(nf => node.startsWith(nf))) {
-      columnsMap.set(node, {
-        format: attributes.format,
-        label: attributes.label,
-        field: node
-      })
 
-      if (!segments[segmentName]) {
-        segments[segmentName] = [];
-      }
-
-      segments[segmentName].push(attributes);
+    if (nodeFields.some(field => node.startsWith(field))) {
+      updateColumns(node, attributes);
+      updateSegment(segmentName, attributes);
     }
-    tree.edges(node).map((e2) => {
-      const attrs = tree.getEdgeAttributes(e2);
-      const target = tree.target(e2);
-      const targetAttrs = tree.getNodeAttributes(target);
 
-      if (attrs.type === EdgeType.Segmentation && targetAttrs.segment[0]?.value) {
+    tree.edges(node).map((edge) => {
+      const attrs = tree.getEdgeAttributes(edge);
+      const target = tree.target(edge);
+      const targetAttrs = tree.getNodeAttributes(target);
+      const targetSegment = targetAttrs.segment[0]?.value;
+
+      if (attrs.type === EdgeType.Segmentation) {
         if (nodeFields.some(nf => target.startsWith(nf)) && target !== node) {
-          groupNodesBySegment(target, targetAttrs, targetAttrs.segment[0]?.value);
+          groupNodesBySegment(target, targetAttrs, targetSegment);
         }
       }
 
       if (attrs.type === EdgeType.Arithmetic) {
         if (nodeFields.some(nf => target.startsWith(nf))) {
-          if (!segments[segmentName]) {
-            segments[segmentName] = []
-          }
-          segments[segmentName].push(targetAttrs);
-          columnsMap.set(target, {
-            format: targetAttrs.format,
-            label: targetAttrs.label,
-            field: target
-          })
+          updateColumns(target, targetAttrs);
+          updateSegment(segmentName, targetAttrs)
         }
       }
     })
