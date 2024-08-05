@@ -1,6 +1,7 @@
 import { treeTable } from "./table";
 import { testTree } from "./__testdata__/testing_trees";
 import { Tree } from "./types";
+import { parseISO } from "date-fns";
 
 describe('Table', () => {
   describe('treeTable', () => {
@@ -52,6 +53,20 @@ describe('Table', () => {
         { field: 'total_orders_calc', label: 'Total Orders', format: 'integer' },
         { field: 'cart_conversion', label: 'Cart Conversion', format: 'percent'},
         { field: 'total_carts', label: 'Total Carts', format: 'integer'}
+      ])
+    })
+
+    it('should generate data', () => {
+      const table = treeTable(tree, parseISO('2021-12-27T00:00:00.000Z'));
+
+      expect(table.data).toEqual([
+         {
+           "conversion": 0.7203318097172846,
+           "date": parseISO('2021-12-27T00:00:00.000Z'),
+           "segment": "Overall",
+           "total_carts": 5944,
+           "total_orders_calc": 4281.652276959539,
+         }
       ])
     })
   });

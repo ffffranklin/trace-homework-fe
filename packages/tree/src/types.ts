@@ -136,6 +136,14 @@ export interface TableDataColumn {
   format: ValueFormat | 'string';
 }
 
+export interface TableDataRow {
+  segment: string,
+  date: Date,
+  conversion: number | null,
+  total_carts: number | null,
+  total_orders_calc: number | null,
+}
+
 /**
  * TODO: IMPLEMENT THIS
  */
@@ -148,4 +156,5 @@ export type TableData = {
     date1: Date | undefined,
     date2: Date | undefined,
   }
+  data: TableDataRow[]
 };

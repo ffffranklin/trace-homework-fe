@@ -1,4 +1,4 @@
-import { EdgeType, TableData, TableDataColumn, Tree } from "./types";
+import { EdgeType, TableData, TableDataColumn, TableDataRow, Tree, TreeNode } from "./types";
 import { bfsFromNode } from "graphology-traversal";
 
 /**
@@ -36,23 +36,24 @@ export function treeTable(
 
   const nodeFields = ['total_orders_calc', 'cart_conversion', 'total_carts'];
   const columnsMap = new Map<string, TableDataColumn>()
+  const segments: {[k: string]: any[]} = {};
 
   columnsMap.set('segment', {
     field: 'segment', label: '', format: 'string'
   })
 
-  // const segments = [];
-  // const metrics = [];
-  // const data = []
-  bfsFromNode(tree, nodeFields[0], (node, attributes, depth) => {
-    const { format, label } = attributes;
+  const data: TableDataRow[] = []
 
+  bfsFromNode(tree, nodeFields[0], (node, attributes, depth) => {
     if (nodeFields.includes(node)) {
       columnsMap.set(node, {
-        format,
-        label,
+        format: attributes.format,
+        label: attributes.label,
         field: node
       })
+
+      segments['Overall'] = [];
+      segments['Overall'].push(attributes);
     }
 
     tree.edges(node).map((e) => {
@@ -61,11 +62,15 @@ export function treeTable(
       const targetAttrs = tree.getNodeAttributes(target)
 
       // follow segments
+      if (attrs.type === EdgeType.Segmentation) {
         // handle segments
+      }
+
       // follow arithmetic
       if (attrs.type === EdgeType.Arithmetic) {
         // handle arithmetic
         if (nodeFields.includes(node)) {
+          segments['Overall'].push(targetAttrs);
           columnsMap.set(target, {
             format: targetAttrs.format,
             label: targetAttrs.label,
@@ -76,6 +81,20 @@ export function treeTable(
     })
 
     return depth === 0;
+  })
+
+  Object.entries(segments).map(([segment, nodes]: [string, TreeNode[]])=> {
+    for (let i = 0; i < nodes[0].data.length; i++) {
+      if ([date1?.toDateString(),date2?.toDateString()].includes(nodes[0].data[i].date.toDateString())) {
+        data.push({
+          segment,
+          date: nodes[0].data[i].date,
+          conversion: nodes[2].data[i].value,
+          total_carts: nodes[1].data[i].value,
+          total_orders_calc: nodes[0].data[i].value,
+        })
+      }
+    }
   })
 
   const columns: TableDataColumn[] = ['segment', 'total_orders_calc', 'cart_conversion', 'total_carts']
@@ -90,6 +109,7 @@ export function treeTable(
     filters: {
       date1,
       date2,
-    }
+    },
+    data
   }
 }
