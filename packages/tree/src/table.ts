@@ -19,15 +19,16 @@ import { Tree, YourTableTypeOrInterfaceOrFunctionEtc } from "./types";
  *   relationships.
  *
  * @param tree The `Tree` object with the data to transform into a table.
+ * @param date1 The base date to filter timeseries data
+ * @param date2 The comparison date to filter timeseries data
  * @returns A `YourTableTypeOrInterfaceOrFunctionEtc` table structure detailing segmented
  *          nodes, their data at two dates, segmentation definitions, and
  *          arithmetic connections.
  */
 export function treeTable(
   tree: Tree,
-  other: any,
-  params: any,
-  if_necessary: any
+  date1: Date,
+  date2: Date,
 ): YourTableTypeOrInterfaceOrFunctionEtc {
   throw "implement me";
 }
