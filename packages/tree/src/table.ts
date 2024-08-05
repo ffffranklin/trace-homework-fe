@@ -1,4 +1,4 @@
-import { Tree, YourTableTypeOrInterfaceOrFunctionEtc } from "./types";
+import { Tree, TableData } from "./types";
 
 /**
  * Transforms a given tree structure into a table format suitable for
@@ -7,7 +7,7 @@ import { Tree, YourTableTypeOrInterfaceOrFunctionEtc } from "./types";
  *
  * The function accepts a `Tree` object, representing a graph of nodes
  * connected by various types of edges. The output is a table structure
- * (represented by `YourTableTypeOrInterfaceOrFunctionEtc`) designed for tabular
+ * (represented by `TableData`) designed for tabular
  * data display.
  *
  * The generated table focuses on nodes with at least one incoming
@@ -21,14 +21,21 @@ import { Tree, YourTableTypeOrInterfaceOrFunctionEtc } from "./types";
  * @param tree The `Tree` object with the data to transform into a table.
  * @param date1 The base date to filter timeseries data
  * @param date2 The comparison date to filter timeseries data
- * @returns A `YourTableTypeOrInterfaceOrFunctionEtc` table structure detailing segmented
+ * @returns A `TableData` table structure detailing segmented
  *          nodes, their data at two dates, segmentation definitions, and
  *          arithmetic connections.
  */
 export function treeTable(
   tree: Tree,
-  date1: Date,
-  date2: Date,
-): YourTableTypeOrInterfaceOrFunctionEtc {
-  throw "implement me";
+  date1?: Date,
+  date2?: Date,
+): TableData {
+
+  if (!tree) throw "implement me";
+
+  return {
+    schema: {
+      name: 'ecommerce_performance'
+    }
+  }
 }

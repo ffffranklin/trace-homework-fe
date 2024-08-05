@@ -30,7 +30,7 @@ Below are some tips:
 
 ### Part 1: Extract graph data into a tabular format
 
-Implement the `treeTable` function in `table.ts` to transform a tree represented by an instance of the `Tree` type into your `YourTableTypeOrInterfaceOrFunctionEtc` type consistent with the constraints detailed in the TSDoc comment attached to `treeTable`.
+Implement the `treeTable` function in `table.ts` to transform a tree represented by an instance of the `Tree` type into your `TableData` type consistent with the constraints detailed in the TSDoc comment attached to `treeTable`.
 
 - This part of the assignment will take place within the `packages/tree` directory of your project setup.
 

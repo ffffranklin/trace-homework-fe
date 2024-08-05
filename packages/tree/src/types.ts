@@ -132,4 +132,8 @@ export type Tree = MultiDirectedGraph<TreeNode, TreeEdge, TreeInfo>;
 /**
  * TODO: IMPLEMENT THIS
  */
-export type YourTableTypeOrInterfaceOrFunctionEtc = never;
+export type TableData = {
+  schema: {
+    name: string,
+  }
+};
