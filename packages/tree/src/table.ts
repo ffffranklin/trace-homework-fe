@@ -44,59 +44,38 @@ export function treeTable(
 
   const data: TableDataRow[] = []
 
-  bfsFromNode(tree, nodeFields[0], (node, attributes, depth) => {
-    if (nodeFields.includes(node)) {
+  function groupNodesBySegment(node: string, attributes: TreeNode, override?: string | number) {
+    const segmentName = attributes.segment[0]?.value || 'Overall'
+    if (nodeFields.some(nf => node.startsWith(nf))) {
       columnsMap.set(node, {
         format: attributes.format,
         label: attributes.label,
         field: node
       })
 
-      segments['Overall'] = [];
-      segments['Overall'].push(attributes);
+      if (!segments[segmentName]) {
+        segments[segmentName] = [];
+      }
+
+      segments[segmentName].push(attributes);
     }
+    tree.edges(node).map((e2) => {
+      const attrs = tree.getEdgeAttributes(e2);
+      const target = tree.target(e2);
+      const targetAttrs = tree.getNodeAttributes(target);
 
-    tree.edges(node).map((e) => {
-      const attrs = tree.getEdgeAttributes(e);
-      const target = tree.target(e);
-      const targetAttrs = tree.getNodeAttributes(target)
-
-      // follow segments
-      if (attrs.type === EdgeType.Segmentation && targetAttrs.segment[0].value) {
-        // handle segments
-        if (nodeFields.some(nf => target.startsWith(nf))) {
-          if (!segments[targetAttrs.segment[0].value]) {
-            segments[targetAttrs.segment[0].value] = []
-          }
-          segments[targetAttrs.segment[0].value].push(targetAttrs);
-          tree.edges(target).map((e2)=> {
-            const attrs = tree.getEdgeAttributes(e2);
-            const target = tree.target(e2);
-            const targetAttrs = tree.getNodeAttributes(target);
-            // follow arithmetic
-            if (attrs.type === EdgeType.Arithmetic) {
-              // handle arithmetic
-              if (nodeFields.some(nf => target.startsWith(nf)) && targetAttrs.segment[0].value) {
-                if (!segments[targetAttrs.segment[0].value]) {
-                  segments[targetAttrs.segment[0].value] = []
-                }
-                segments[targetAttrs.segment[0].value].push(targetAttrs);
-                columnsMap.set(target, {
-                  format: targetAttrs.format,
-                  label: targetAttrs.label,
-                  field: target
-                })
-              }
-            }
-          })
+      if (attrs.type === EdgeType.Segmentation && targetAttrs.segment[0]?.value) {
+        if (nodeFields.some(nf => target.startsWith(nf)) && target !== node) {
+          groupNodesBySegment(target, targetAttrs, targetAttrs.segment[0]?.value);
         }
       }
 
-      // follow arithmetic
       if (attrs.type === EdgeType.Arithmetic) {
-        // handle arithmetic
-        if (nodeFields.includes(target)) {
-          segments['Overall'].push(targetAttrs);
+        if (nodeFields.some(nf => target.startsWith(nf))) {
+          if (!segments[segmentName]) {
+            segments[segmentName] = []
+          }
+          segments[segmentName].push(targetAttrs);
           columnsMap.set(target, {
             format: targetAttrs.format,
             label: targetAttrs.label,
@@ -105,7 +84,10 @@ export function treeTable(
         }
       }
     })
+  }
 
+  bfsFromNode(tree, nodeFields[0], (node, attributes, depth) => {
+    groupNodesBySegment(node, attributes)
     return depth === 0;
   })
 
