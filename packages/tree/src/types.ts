@@ -51,6 +51,7 @@ export enum ValueFormat {
   Currency = "currency",
   Integer = "integer",
   Decimal = "decimal",
+  Percent = "percent",
 }
 
 /**
@@ -129,12 +130,19 @@ export type TreeInfo = {
  */
 export type Tree = MultiDirectedGraph<TreeNode, TreeEdge, TreeInfo>;
 
+export interface TableDataColumn {
+  field: string;
+  label: string;
+  format: ValueFormat | 'string';
+}
+
 /**
  * TODO: IMPLEMENT THIS
  */
 export type TableData = {
   schema: {
     name: string,
+    columns: TableDataColumn[]
   },
   filters: {
     date1: Date | undefined,

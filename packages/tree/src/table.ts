@@ -1,4 +1,5 @@
-import { TableData, Tree } from "./types";
+import { EdgeType, TableData, TableDataColumn, Tree } from "./types";
+import { bfsFromNode } from "graphology-traversal";
 
 /**
  * Transforms a given tree structure into a table format suitable for
@@ -33,9 +34,52 @@ export function treeTable(
 
   if (!tree) throw "implement me";
 
+  const nodeFields = ['total_orders_calc', 'cart_conversion', 'total_carts'];
+  const columnsMap: { [p: string]: TableDataColumn | undefined } = Object.fromEntries(nodeFields.map(nf => [nf]));
+  // const segments = [];
+  // const metrics = [];
+  // const data = []
+  bfsFromNode(tree, nodeFields[0], (node, attributes, depth) => {
+    const { format, label } = attributes;
+
+    if (nodeFields.includes(node)) {
+      columnsMap[node] = {
+        format,
+        label,
+        field: node
+      };
+    }
+
+    tree.edges(node).map((e) => {
+      const attrs = tree.getEdgeAttributes(e);
+      const target = tree.target(e);
+      const targetAttrs = tree.getNodeAttributes(target)
+
+      // follow segments
+        // handle segments
+      // follow arithmetic
+      if (attrs.type === EdgeType.Arithmetic) {
+        // handle arithmetic
+        if (nodeFields.includes(node)) {
+          columnsMap[target] = {
+            format: targetAttrs.format,
+            label: targetAttrs.label,
+            field: target
+          };
+        }
+      }
+    })
+
+    return depth === 0;
+  })
+
   return {
     schema: {
-      name: 'ecommerce_performance'
+      name: 'ecommerce_performance',
+      columns: [
+        { field: 'segment', label: '', format: 'string' },
+        ...nodeFields.map(k => columnsMap[k] as TableDataColumn)
+      ]
     },
     filters: {
       date1,

@@ -43,6 +43,17 @@ describe('Table', () => {
         expect(table.filters.date2).toEqual(date2)
       });
     })
+
+    it('should generate schema columns', ()=> {
+      const table = treeTable(tree)
+
+      expect(table.schema.columns).toEqual([
+        { field: 'segment', label: '', format: 'string'},
+        { field: 'total_orders_calc', label: 'Total Orders', format: 'integer' },
+        { field: 'cart_conversion', label: 'Cart Conversion', format: 'percent'},
+        { field: 'total_carts', label: 'Total Carts', format: 'integer'}
+      ])
+    })
   });
 });
 
