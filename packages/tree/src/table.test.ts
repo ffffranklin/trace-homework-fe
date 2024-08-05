@@ -66,7 +66,28 @@ describe('Table', () => {
            "segment": "Overall",
            "total_carts": 5944,
            "total_orders_calc": 4281.652276959539,
-         }
+         },
+        {
+          "conversion": 0.7346225535880708,
+          "date": parseISO("2021-12-27T00:00:00.000Z"),
+          "segment": "New York",
+          "total_carts": 4234,
+          "total_orders_calc": 3110.391891891892
+        },
+        {
+          "conversion": 0.7021276595744681,
+          "date": parseISO("2021-12-27T00:00:00.000Z"),
+          "segment": "Boston",
+          "total_carts": 47,
+          "total_orders_calc": 33
+        },
+        {
+          "conversion": 0.7734375,
+          "date": parseISO("2021-12-27T00:00:00.000Z"),
+          "segment": "Chicago",
+          "total_carts": 129,
+          "total_orders_calc": 99.7734375
+        }
       ])
     })
   });

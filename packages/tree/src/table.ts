@@ -36,7 +36,7 @@ export function treeTable(
 
   const nodeFields = ['total_orders_calc', 'cart_conversion', 'total_carts'];
   const columnsMap = new Map<string, TableDataColumn>()
-  const segments: {[k: string]: any[]} = {};
+  const segments: { [k: string]: any[] } = {};
 
   columnsMap.set('segment', {
     field: 'segment', label: '', format: 'string'
@@ -62,14 +62,40 @@ export function treeTable(
       const targetAttrs = tree.getNodeAttributes(target)
 
       // follow segments
-      if (attrs.type === EdgeType.Segmentation) {
+      if (attrs.type === EdgeType.Segmentation && targetAttrs.segment[0].value) {
         // handle segments
+        if (nodeFields.some(nf => target.startsWith(nf))) {
+          if (!segments[targetAttrs.segment[0].value]) {
+            segments[targetAttrs.segment[0].value] = []
+          }
+          segments[targetAttrs.segment[0].value].push(targetAttrs);
+          tree.edges(target).map((e2)=> {
+            const attrs = tree.getEdgeAttributes(e2);
+            const target = tree.target(e2);
+            const targetAttrs = tree.getNodeAttributes(target);
+            // follow arithmetic
+            if (attrs.type === EdgeType.Arithmetic) {
+              // handle arithmetic
+              if (nodeFields.some(nf => target.startsWith(nf)) && targetAttrs.segment[0].value) {
+                if (!segments[targetAttrs.segment[0].value]) {
+                  segments[targetAttrs.segment[0].value] = []
+                }
+                segments[targetAttrs.segment[0].value].push(targetAttrs);
+                columnsMap.set(target, {
+                  format: targetAttrs.format,
+                  label: targetAttrs.label,
+                  field: target
+                })
+              }
+            }
+          })
+        }
       }
 
       // follow arithmetic
       if (attrs.type === EdgeType.Arithmetic) {
         // handle arithmetic
-        if (nodeFields.includes(node)) {
+        if (nodeFields.includes(target)) {
           segments['Overall'].push(targetAttrs);
           columnsMap.set(target, {
             format: targetAttrs.format,
@@ -83,9 +109,9 @@ export function treeTable(
     return depth === 0;
   })
 
-  Object.entries(segments).map(([segment, nodes]: [string, TreeNode[]])=> {
+  Object.entries(segments).map(([segment, nodes]: [string, TreeNode[]]) => {
     for (let i = 0; i < nodes[0].data.length; i++) {
-      if ([date1?.toDateString(),date2?.toDateString()].includes(nodes[0].data[i].date.toDateString())) {
+      if ([date1?.toDateString(), date2?.toDateString()].includes(nodes[0].data[i].date.toDateString())) {
         data.push({
           segment,
           date: nodes[0].data[i].date,
@@ -98,8 +124,8 @@ export function treeTable(
   })
 
   const columns: TableDataColumn[] = ['segment', 'total_orders_calc', 'cart_conversion', 'total_carts']
-    .filter((field)=> columnsMap.has(field))
-    .map((field)=> columnsMap.get(field) as TableDataColumn)
+    .filter((field) => columnsMap.has(field))
+    .map((field) => columnsMap.get(field) as TableDataColumn)
 
   return {
     schema: {
