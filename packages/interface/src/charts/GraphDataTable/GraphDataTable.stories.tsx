@@ -1,6 +1,8 @@
 import { GraphDataTable } from "./GraphDataTable";
 import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
+import { treeTable } from "@exp/tree";
+import { testTree } from "@exp/tree/src/__testdata__/testing_trees";
 
 const meta = {
   component: GraphDataTable,
@@ -15,24 +17,7 @@ type Story = StoryObj<typeof meta>
 
 export const Primary: Story = {
   args: {
-    className: 'test',
-    data: {
-      schema: {
-        name: 'test',
-        columns: [
-          {
-            field: 'a',
-            label: 'A',
-            format: 'string',
-          }
-        ],
-      },
-      filters: {
-        date1: new Date(),
-        date2: undefined,
-      },
-      data: []
-    }
+    data: treeTable(testTree()),
   },
   decorators: [
     (Story) => {
