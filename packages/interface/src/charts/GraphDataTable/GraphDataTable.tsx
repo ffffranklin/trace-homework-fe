@@ -15,7 +15,15 @@ export const GraphDataTable: FunctionComponent<GraphDataTableProps> = (
 
   const columns = data.schema.columns.map((column) =>
     columnHelper.accessor(column.field as any, {
-      cell: info => info.getValue(),
+      cell: info => {
+        const val = info.getValue();
+
+        if (Array.isArray(val)) {
+          return val[0] - val[1];
+        } else {
+          return val
+        }
+      },
       header: (info)=> <span>{column.label}</span>
     })
   )
