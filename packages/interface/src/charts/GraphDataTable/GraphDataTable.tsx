@@ -15,14 +15,15 @@ export const GraphDataTable: FunctionComponent<GraphDataTableProps> = (
 
   const columns = data.schema.columns.map((column) =>
     columnHelper.accessor(column.field as any, {
-      cell: info => info.getValue()
+      cell: info => info.getValue(),
+      header: (info)=> <span>{column.label}</span>
     })
   )
 
   const table = useReactTable<TableDataRow>({
     data: data.data,
     columns,
-    getCoreRowModel: getCoreRowModel()
+    getCoreRowModel: getCoreRowModel<TableDataRow>()
   })
 
   return (
