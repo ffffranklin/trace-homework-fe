@@ -66,7 +66,7 @@ export const Primary: Story = {
   render(args, { globals }) {
     return (
       <WaterfallChart
-        theme={globals.backgrounds.value === '#333333' && Theme.Dark || Theme.Light}
+        theme={globals?.backgrounds?.value === '#333333' && Theme.Dark || Theme.Light}
         series={args.series}
         format={args.format}
       />
