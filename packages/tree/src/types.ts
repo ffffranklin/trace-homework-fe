@@ -138,10 +138,10 @@ export interface TableDataColumn {
 
 export interface TableDataRow {
   segment: string,
-  date: Date,
-  cart_conversion: number | null,
-  total_carts: number | null,
-  total_orders_calc: number | null,
+  date: Date | (Date | null)[] | null,
+  cart_conversion: number | (number | null)[] | null,
+  total_carts: number | (number | null)[] | null,
+  total_orders_calc: number | (number | null)[] | null,
 }
 
 /**

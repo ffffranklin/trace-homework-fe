@@ -87,17 +87,21 @@ export function treeTable(
   })
 
   Object.entries(segments).map(([segment, nodes]: [string, TreeNode[]]) => {
+    let row: TableDataRow = { segment, date: null, total_orders_calc: null, cart_conversion: null, total_carts: null }
+
+    if (date1 && date2) {
+      row = { segment, date: [], total_orders_calc: [], cart_conversion: [], total_carts: []}
+    }
+
     for (let i = 0; i < nodes[0].data.length; i++) {
       if ([date1?.toDateString(), date2?.toDateString()].includes(nodes[0].data[i].date.toDateString())) {
-        data.push({
-          segment,
-          date: nodes[0].data[i].date,
-          cart_conversion: nodes[2].data[i].value,
-          total_carts: nodes[1].data[i].value,
-          total_orders_calc: nodes[0].data[i].value,
-        })
+        row.date = Array.isArray(row.date) ? [...row.date, nodes[0].data[i].date] : nodes[0].data[i].date;
+        row.cart_conversion = Array.isArray(row.cart_conversion) ? [...row.cart_conversion, nodes[2].data[i].value] : nodes[2].data[i].value;
+        row.total_carts = Array.isArray(row.total_carts) ? [...row.total_carts, nodes[1].data[i].value] : nodes[1].data[i].value;
+        row.total_orders_calc = Array.isArray(row.total_orders_calc) ? [...row.total_orders_calc, nodes[0].data[i].value] : nodes[0].data[i].value;
       }
     }
+    data.push(row)
   })
 
   const columns: TableDataColumn[] = ['segment', 'total_orders_calc', 'cart_conversion', 'total_carts']

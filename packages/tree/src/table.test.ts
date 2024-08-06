@@ -45,14 +45,14 @@ describe('Table', () => {
       });
     })
 
-    it('should generate schema columns', ()=> {
+    it('should generate schema columns', () => {
       const table = treeTable(tree)
 
       expect(table.schema.columns).toEqual([
-        { field: 'segment', label: '', format: 'string'},
+        { field: 'segment', label: '', format: 'string' },
         { field: 'total_orders_calc', label: 'Total Orders', format: 'integer' },
-        { field: 'cart_conversion', label: 'Cart Conversion', format: 'percent'},
-        { field: 'total_carts', label: 'Total Carts', format: 'integer'}
+        { field: 'cart_conversion', label: 'Cart Conversion', format: 'percent' },
+        { field: 'total_carts', label: 'Total Carts', format: 'integer' }
       ])
     })
 
@@ -60,13 +60,13 @@ describe('Table', () => {
       const table = treeTable(tree, parseISO('2021-12-27T00:00:00.000Z'));
 
       expect(table.data).toEqual([
-         {
-           "cart_conversion": 0.7203318097172846,
-           "date": parseISO('2021-12-27T00:00:00.000Z'),
-           "segment": "Overall",
-           "total_carts": 5944,
-           "total_orders_calc": 4281.652276959539,
-         },
+        {
+          "cart_conversion": 0.7203318097172846,
+          "date": parseISO('2021-12-27T00:00:00.000Z'),
+          "segment": "Overall",
+          "total_carts": 5944,
+          "total_orders_calc": 4281.652276959539,
+        },
         {
           "cart_conversion": 0.7346225535880708,
           "date": parseISO("2021-12-27T00:00:00.000Z"),
@@ -87,6 +87,45 @@ describe('Table', () => {
           "segment": "Chicago",
           "total_carts": 129,
           "total_orders_calc": 99.7734375
+        }
+      ])
+    })
+
+    it('should generate multiple data', () => {
+      const table = treeTable(
+        tree,
+        parseISO('2021-12-27T00:00:00.000Z'),
+        parseISO('2022-02-07T00:00:00.000Z')
+      );
+
+      expect(table.data).toEqual([
+        {
+          "cart_conversion": [0.7203318097172846, 0.8112084173387096],
+          "date": [parseISO('2021-12-27T00:00:00.000Z'), parseISO('2022-02-07T00:00:00.000Z')],
+          "segment": "Overall",
+          "total_carts": [5944, 32090],
+          "total_orders_calc": [4281.652276959539, 26031.678112399193],
+        },
+        {
+          "cart_conversion": [0.7346225535880708, 0.8167707103087566],
+          "date": [parseISO('2021-12-27T00:00:00.000Z'), parseISO('2022-02-07T00:00:00.000Z')],
+          "segment": "New York",
+          "total_carts": [4234, 24129],
+          "total_orders_calc": [3110.391891891892, 19707.860469039988]
+        },
+        {
+          "cart_conversion": [0.7021276595744681, 0.806910569105691],
+          "date": [parseISO('2021-12-27T00:00:00.000Z'), parseISO('2022-02-07T00:00:00.000Z')],
+          "segment": "Boston",
+          "total_carts": [47, 486],
+          "total_orders_calc": [33, 392.1585365853658]
+        },
+        {
+          "cart_conversion": [0.7734375, 0.8210609659540776],
+          "date": [parseISO('2021-12-27T00:00:00.000Z'), parseISO('2022-02-07T00:00:00.000Z')],
+          "segment": "Chicago",
+          "total_carts": [129, 1249],
+          "total_orders_calc": [99.7734375, 1025.505146476643]
         }
       ])
     })
