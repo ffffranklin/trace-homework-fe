@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      '@exp/commons':
-        specifier: workspace:^1.0.0
-        version: link:packages/commons
     devDependencies:
       '@types/jest':
         specifier: ^29.5.11
