@@ -18,7 +18,11 @@ type Story = StoryObj<typeof meta>
 
 export const Primary: Story = {
   args: {
-    data: treeTable(testTree(), parseISO('2022-01-03T00:00:00.000Z')),
+    data: treeTable(
+      testTree(),
+      parseISO('2022-01-03T00:00:00.000Z'),
+      parseISO('2022-02-07T00:00:00.000Z')
+    ),
   },
   decorators: [
     (Story) => {

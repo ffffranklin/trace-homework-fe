@@ -92,7 +92,7 @@ export function treeTable(
         data.push({
           segment,
           date: nodes[0].data[i].date,
-          conversion: nodes[2].data[i].value,
+          cart_conversion: nodes[2].data[i].value,
           total_carts: nodes[1].data[i].value,
           total_orders_calc: nodes[0].data[i].value,
         })
