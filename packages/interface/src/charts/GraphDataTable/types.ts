@@ -1,4 +1,4 @@
-import { TableData } from "@exp/commons";
+import { TableData } from "@exp/tree";
 
 export type GraphDataTableProps = {
   className?: string;
