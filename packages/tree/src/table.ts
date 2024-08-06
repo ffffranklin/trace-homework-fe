@@ -87,20 +87,33 @@ export function treeTable(
   })
 
   Object.entries(segments).map(([segment, nodes]: [string, TreeNode[]]) => {
+    const [total_orders_calc, total_carts, cart_conversion] = nodes;
     let row: TableDataRow = { segment, date: null, total_orders_calc: null, cart_conversion: null, total_carts: null }
 
     if (date1 && date2) {
-      row = { segment, date: [], total_orders_calc: [], cart_conversion: [], total_carts: []}
+      row = { segment, date: [], total_orders_calc: [], cart_conversion: [], total_carts: [] }
     }
 
     for (let i = 0; i < nodes[0].data.length; i++) {
-      if ([date1?.toDateString(), date2?.toDateString()].includes(nodes[0].data[i].date.toDateString())) {
-        row.date = Array.isArray(row.date) ? [...row.date, nodes[0].data[i].date] : nodes[0].data[i].date;
-        row.cart_conversion = Array.isArray(row.cart_conversion) ? [...row.cart_conversion, nodes[2].data[i].value] : nodes[2].data[i].value;
-        row.total_carts = Array.isArray(row.total_carts) ? [...row.total_carts, nodes[1].data[i].value] : nodes[1].data[i].value;
-        row.total_orders_calc = Array.isArray(row.total_orders_calc) ? [...row.total_orders_calc, nodes[0].data[i].value] : nodes[0].data[i].value;
+      const getDate = (node: TreeNode) => node.data[i].date;
+      const getValue = (node: TreeNode) => node.data[i].value;
+
+      if ([date1?.toDateString(), date2?.toDateString()].includes(getDate(total_orders_calc).toDateString())) {
+        row.date = Array.isArray(row.date)
+          ? [...row.date, getDate(total_orders_calc)]
+          : getDate(total_orders_calc);
+        row.cart_conversion = Array.isArray(row.cart_conversion)
+          ? [...row.cart_conversion, getValue(cart_conversion)]
+          : getValue(cart_conversion);
+        row.total_carts = Array.isArray(row.total_carts)
+          ? [...row.total_carts, getValue(total_carts)]
+          : getValue(total_carts);
+        row.total_orders_calc = Array.isArray(row.total_orders_calc)
+          ? [...row.total_orders_calc, getValue(total_orders_calc)]
+          : getValue(total_orders_calc);
       }
     }
+
     data.push(row)
   })
 
