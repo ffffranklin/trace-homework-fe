@@ -53,6 +53,9 @@ importers:
       '@exp/commons':
         specifier: workspace:^1.0.0
         version: link:../commons
+      '@exp/tree':
+        specifier: workspace:^1.0.0
+        version: link:../tree
       '@tanstack/react-table':
         specifier: ^8.20.1
         version: 8.20.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
